@@ -1,4 +1,5 @@
 package pakcageForEverything;
+
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -29,13 +31,11 @@ public class instantiationOfToDo {
 	protected void setupFrame() {
 		frame.setLayout(null);
 
-		// Text field for entering mission name
 		missionInput = new JTextField();
 		missionInput.setFont(new Font("Arial", Font.PLAIN, 20));
 		missionInput.setBounds(100, 100, 400, 50);
 		frame.add(missionInput);
 
-		// Button to add mission
 		JButton addButton = new JButton("Add Mission");
 		addButton.setFont(new Font("Arial", Font.PLAIN, 20));
 		addButton.setBounds(120, 180, 350, 50);
@@ -47,19 +47,16 @@ public class instantiationOfToDo {
 		});
 		frame.add(addButton);
 
-		// Panel to display missions
 		missionPanel = new JPanel();
 		missionPanel.setLayout(new BoxLayout(missionPanel, BoxLayout.Y_AXIS));
 		missionPanel.setBounds(100, 250, 400, 500);
 		JScrollPane scrollPane = new JScrollPane(missionPanel);
 		scrollPane.setBounds(100, 250, 400, 500);
 		frame.add(scrollPane);
-
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
 
-	// Method to add a mission
 	private void addMission() {
 		String missionName = missionInput.getText();
 		if (!missionName.trim().isEmpty()) {
@@ -72,28 +69,39 @@ public class instantiationOfToDo {
 		}
 	}
 
-	// Display each mission as a button
 	private void displayMission(classForMissions mission) {
-		JButton missionButton = new JButton(mission.getNameOfMission());
-		missionButton.setFont(new Font("Arial", Font.PLAIN, 18));
-		missionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		JPanel singleMissionPanel = new JPanel();
+		singleMissionPanel.setLayout(new BoxLayout(singleMissionPanel, BoxLayout.X_AXIS));
+
+		JLabel textInfo = new JLabel(mission.getNameOfMission());
+		textInfo.setFont(new Font("Arial", Font.PLAIN, 20));
+		
+		JButton missionButton = new JButton("X");
+		missionButton.setFont(new Font("Arial", Font.PLAIN, 8));
+		
 
 		missionButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Action for each mission button
-				removeMission(mission, missionButton);
+				removeMission(mission, missionButton, textInfo);
 			}
 		});
 
-		missionPanel.add(missionButton);
+	    // Add label and button to the horizontal panel for this mission
+	    singleMissionPanel.add(textInfo);
+	    singleMissionPanel.add(missionButton);
+
+		missionPanel.add(singleMissionPanel);
+		
 		missionPanel.revalidate(); // Refresh panel to show new button
 	}
 
-	// Method to remove a mission and its button from the panel
-	private void removeMission(classForMissions mission, JButton missionButton) {
+	private void removeMission(classForMissions mission, JButton missionButton, JLabel textInfo) {
+		missions.remove(mission);
 		missions.remove(mission); // Remove mission from list
 		missionPanel.remove(missionButton); // Remove button from panel
+		missionPanel.remove(textInfo); // Remove button from panel
 		missionPanel.revalidate();
 		missionPanel.repaint(); // Refresh panel to reflect removal
 	}
