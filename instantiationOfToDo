@@ -1,0 +1,100 @@
+package pakcageForEverything;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+
+public class instantiationOfToDo {
+	private JFrame frame;
+	private JTextField missionInput;
+	private JPanel missionPanel;
+	private ArrayList<classForMissions> missions;
+
+	public instantiationOfToDo() {
+		frame = new JFrame("Daily Missions");
+		frame.setSize(600, 800);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		missions = new ArrayList<>();
+		setupFrame();
+	}
+
+	protected void setupFrame() {
+		frame.setLayout(null);
+
+		// Text field for entering mission name
+		missionInput = new JTextField();
+		missionInput.setFont(new Font("Arial", Font.PLAIN, 20));
+		missionInput.setBounds(100, 100, 400, 50);
+		frame.add(missionInput);
+
+		// Button to add mission
+		JButton addButton = new JButton("Add Mission");
+		addButton.setFont(new Font("Arial", Font.PLAIN, 20));
+		addButton.setBounds(120, 180, 350, 50);
+		addButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				addMission();
+			}
+		});
+		frame.add(addButton);
+
+		// Panel to display missions
+		missionPanel = new JPanel();
+		missionPanel.setLayout(new BoxLayout(missionPanel, BoxLayout.Y_AXIS));
+		missionPanel.setBounds(100, 250, 400, 500);
+		JScrollPane scrollPane = new JScrollPane(missionPanel);
+		scrollPane.setBounds(100, 250, 400, 500);
+		frame.add(scrollPane);
+
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+	}
+
+	// Method to add a mission
+	private void addMission() {
+		String missionName = missionInput.getText();
+		if (!missionName.trim().isEmpty()) {
+			classForMissions newMission = new classForMissions(missionName);
+			missions.add(newMission);
+			displayMission(newMission);
+			missionInput.setText(""); // Clear input after adding
+		} else {
+			JOptionPane.showMessageDialog(frame, "Please enter a mission name.");
+		}
+	}
+
+	// Display each mission as a button
+	private void displayMission(classForMissions mission) {
+		JButton missionButton = new JButton(mission.getNameOfMission());
+		missionButton.setFont(new Font("Arial", Font.PLAIN, 18));
+		missionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+		missionButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Action for each mission button
+				removeMission(mission, missionButton);
+			}
+		});
+
+		missionPanel.add(missionButton);
+		missionPanel.revalidate(); // Refresh panel to show new button
+	}
+
+	// Method to remove a mission and its button from the panel
+	private void removeMission(classForMissions mission, JButton missionButton) {
+		missions.remove(mission); // Remove mission from list
+		missionPanel.remove(missionButton); // Remove button from panel
+		missionPanel.revalidate();
+		missionPanel.repaint(); // Refresh panel to reflect removal
+	}
+}
