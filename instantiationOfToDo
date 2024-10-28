@@ -73,35 +73,33 @@ public class instantiationOfToDo {
 		JPanel singleMissionPanel = new JPanel();
 		singleMissionPanel.setLayout(new BoxLayout(singleMissionPanel, BoxLayout.X_AXIS));
 
-		JLabel textInfo = new JLabel(mission.getNameOfMission());
+		JLabel textInfo = new JLabel(mission.getNameOfMission() + " \n");
 		textInfo.setFont(new Font("Arial", Font.PLAIN, 20));
 		
 		JButton missionButton = new JButton("X");
 		missionButton.setFont(new Font("Arial", Font.PLAIN, 8));
-		
 
 		missionButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Action for each mission button
-				removeMission(mission, missionButton, textInfo);
+				removeMission(mission, singleMissionPanel);
 			}
 		});
 
-	    // Add label and button to the horizontal panel for this mission
-	    singleMissionPanel.add(textInfo);
-	    singleMissionPanel.add(missionButton);
+		// Add label and button to the horizontal panel for this mission
+		singleMissionPanel.add(textInfo);
+		singleMissionPanel.add(missionButton);
 
 		missionPanel.add(singleMissionPanel);
-		
+
 		missionPanel.revalidate(); // Refresh panel to show new button
 	}
 
-	private void removeMission(classForMissions mission, JButton missionButton, JLabel textInfo) {
+	private void removeMission(classForMissions mission, JPanel singleMissionPanel) {
 		missions.remove(mission);
 		missions.remove(mission); // Remove mission from list
-		missionPanel.remove(missionButton); // Remove button from panel
-		missionPanel.remove(textInfo); // Remove button from panel
+		missionPanel.remove(singleMissionPanel); // Remove button from panel
 		missionPanel.revalidate();
 		missionPanel.repaint(); // Refresh panel to reflect removal
 	}
